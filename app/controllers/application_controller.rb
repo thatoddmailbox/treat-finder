@@ -1,3 +1,4 @@
+
 require_relative "../../config/environment"
 
 require "open-uri"
@@ -11,29 +12,75 @@ Yelp.client.configure do |config|
 end
 
 class ApplicationController < Sinatra::Base
-  
-  enable :sessions
-  set :session_secret, 'this is a cookie secret that you should change to some random letters...'
-  
-  set :views, "app/views"
-  set :public_folder, "public"
+  configure do
+    enable :sessions
+    set :session_secret, 'Put random letters here'
+    set :views, "app/views"
+    set :public_folder, "public"
+  end
   
   get "/" do
     erb :index
   end
   
   post "/find_treats" do
-    #result = JSON.parse(open("https://maps.googleapis.com/maps/api/geocode/json?address=" + URI.encode(params[:location])).read)["results"]
-    #puts result.inspect
-    #puts result[0]["geometry"]["location"].inspect
-    
+    @results = Yelp.client.search(params[:location], { term: params[:search]   }, { :cc => "US", :lang => "en" })
     
     erb :search_results
   end
   
+  
   helpers do
     def h(text)
       Rack::Utils.escape_html(text)
+    end
+    
+    def jsObject(obj)
+      if obj.class == String
+        return jsString(obj)
+      elsif obj.class == BurstStruct::Burst
+        return jsBStruct(obj)
+      else 
+        return jsString(obj.to_s)
+      end
+    end
+    
+    def jsString(str)
+      return "\"" + str.gsub("\"", "\\\"") + "\""
+    end
+    
+    def jsBStruct(hash)
+      returnStr = "{"
+      first = true
+      hash.keys.each do |key|
+        if first
+          first = false
+        else
+          returnStr += ", "
+        end
+        returnStr += key
+        returnStr += ": "
+        returnStr += jsObject(hash.send(key))
+      end
+      
+      returnStr += "}"
+      
+      return returnStr
+    end
+
+    def jsArray(arr)
+      returnStr = "["
+      first_time = true
+      arr.each do |item|
+        if not first_time
+          returnStr += ", "
+        else
+          first_time = false
+        end
+        returnStr += jsBStruct(item)
+      end
+      returnStr += "]"
+      return returnStr
     end
   end
   

@@ -1,0 +1,11 @@
+@import url(http://fonts.googleapis.com/css?family=Bangers);
+
+body {
+    background-color: #C2C2FF;
+    font-family: Arial;
+}
+
+#map-canvas {
+  width: 500px;
+  height: 400px;
+}

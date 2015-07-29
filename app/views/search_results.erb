@@ -1,1 +1,45 @@
-<h1>Here are your treats!</h1>
+<h1>Here are your search results!</h1>
+
+<div id="map-canvas"></div>
+
+<% @results.businesses.each do |business| %>
+
+<h3><%= h business.name %></h3>
+<img src="<%= h business.rating_img_url_large %>">
+<%
+  display_address_str = ""
+  first = true
+  business.location.display_address.each do |part|
+    if first
+      first = false
+    else
+      display_address_str += ", "
+    end
+    display_address_str += part
+  end
+%>
+<h4><%= h display_address_str %></h4>
+<iframe
+  width="600"
+  height="400"
+  frameborder="0" style="border:0"
+  src="https://www.google.com/maps/embed/v1/place?key=<%= $GOOGLE_API_KEY %>
+       &q=<%= h URI.encode(display_address_str) %>" allowfullscreen></iframe>
+<% end %>
+  
+<script>
+$(document).ready(function() {
+  var mapCanvas = document.getElementById('map-canvas');
+  var mapOptions = {
+    center: new google.maps.LatLng(44.5403, -78.5463),
+    zoom: 8,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var businesses = {
+    <%=
+      jsArray @results.businesses
+    %>
+  };
+  var map = new google.maps.Map(mapCanvas, mapOptions);
+});
+</script>
