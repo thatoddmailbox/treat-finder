@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Treat Finder</title>
+    <title>Qley</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/fixedsticky.css">
@@ -15,6 +15,10 @@
       body {
         padding: 10px;
       }
+      .logo {
+        width: 200px;
+        height: 90px;
+      }
     </style>
     <script>
       $(document).ready(function() {
@@ -24,6 +28,17 @@
   </head>
   <body>
     <div class="container">
+      <div class="row">
+        <div class="box">
+          <div class="col-lg-3">
+            <img src="img/qley.png" class="logo"/>
+          </div>
+          <div class="col-lg-9">
+            <br />
+            <h3><em>"Turning the finding places industry on its side."</em></h3>
+          </div>
+        </div>
+      </div>
       <%= yield %>
     </div>
   </body>
