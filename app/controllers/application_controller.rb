@@ -1,5 +1,15 @@
 require_relative "../../config/environment"
 
+require "open-uri"
+require 'yelp'
+
+Yelp.client.configure do |config|
+  config.consumer_key = $YELP_CONSUMER_KEY
+  config.consumer_secret = $YELP_CONSUMER_SECRET
+  config.token = $YELP_TOKEN
+  config.token_secret = $YELP_TOKEN_SECRET
+end
+
 class ApplicationController < Sinatra::Base
   
   enable :sessions
@@ -13,7 +23,12 @@ class ApplicationController < Sinatra::Base
   end
   
   post "/find_treats" do
-    "LOADING TREATS"
+    #result = JSON.parse(open("https://maps.googleapis.com/maps/api/geocode/json?address=" + URI.encode(params[:location])).read)["results"]
+    #puts result.inspect
+    #puts result[0]["geometry"]["location"].inspect
+    
+    
+    erb :search_results
   end
   
   helpers do
