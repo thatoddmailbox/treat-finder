@@ -1,45 +1,100 @@
-<h1>Here are your search results!</h1>
+<div class="row">
+  <div class="box">
+    <div class="col-lg-12">
+      <h1>Here are your search results!</h1>
 
-<div id="map-canvas"></div>
+      <div class="row">
+        <div class="col-md-8">
+          <div id="map-canvas"></div>
+        </div>
+        <div class="col-md-4">
 
-<% @results.businesses.each do |business| %>
+          <% @results.businesses.each do |business| %>
 
-<h3><%= h business.name %></h3>
-<img src="<%= h business.rating_img_url_large %>">
-<%
-  display_address_str = ""
-  first = true
-  business.location.display_address.each do |part|
-    if first
-      first = false
-    else
-      display_address_str += ", "
-    end
-    display_address_str += part
+          <h3><%= h business.name %></h3>
+          <img src="<%= h business.rating_img_url_large %>">
+          <%
+display_address_str = ""
+first = true
+business.location.display_address.each do |part|
+  if first
+    first = false
+  else
+    display_address_str += ", "
   end
+  display_address_str += part
+end
 %>
-<h4><%= h display_address_str %></h4>
-<iframe
-  width="600"
-  height="400"
-  frameborder="0" style="border:0"
-  src="https://www.google.com/maps/embed/v1/place?key=<%= $GOOGLE_API_KEY %>
-       &q=<%= h URI.encode(display_address_str) %>" allowfullscreen></iframe>
-<% end %>
-  
-<script>
-$(document).ready(function() {
-  var mapCanvas = document.getElementById('map-canvas');
-  var mapOptions = {
-    center: new google.maps.LatLng(44.5403, -78.5463),
-    zoom: 8,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  var businesses = {
-    <%=
-      jsArray @results.businesses
-    %>
-  };
-  var map = new google.maps.Map(mapCanvas, mapOptions);
-});
-</script>
+          <h4><%= h display_address_str %></h4>
+          <% end %>
+        </div>
+      </div>
+
+      <script>
+        var map;
+        var geocoder;
+        function geocodeAndPlace(address, businessParam)
+        {
+          var business = businessParam;
+          geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              map.setCenter(results[0].geometry.location);
+              var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location,
+                title: "Hello World!"
+              });
+              google.maps.event.addListener(marker, 'click', function() {
+                if (window.curInfo != undefined)
+                {
+                  window.curInfo.close();
+                }
+                window.curInfo = new google.maps.InfoWindow({
+                  content: "<h3>" + business.name + "</h3><img src=\"" + business.rating_img_url + "\"> " + business.review_count + " reviewers <h4>" + (business.display_phone === undefined ? "" : business.display_phone) + "</h4><img src=\"" + business.image_url + "\">"
+                });
+                window.curInfo.open(map,marker);
+              });
+            } else {
+              console.error('Geocode was not successful for the following reason: ' + status);
+            }
+          });
+        }
+
+        $(document).ready(function() {
+          var businesses = <%= jsArray @results.businesses %>;
+
+          var mapCanvas = document.getElementById('map-canvas');
+          var mapOptions = {
+            center: new google.maps.LatLng(0, 0),
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+
+          map = new google.maps.Map(mapCanvas, mapOptions);
+          geocoder = new google.maps.Geocoder();
+
+          for (var bIndex in businesses)
+          {
+            var business = businesses[bIndex];
+            var display_address_str = "";
+            var first = true;
+            for (var aIndex in business.location.display_address)
+            {
+              var part = business.location.display_address[aIndex];
+              if (first)
+              {
+                first = false;
+              }
+              else
+              {
+                display_address_str += ", ";
+              }
+              display_address_str += part;
+            }
+            geocodeAndPlace(display_address_str, business);
+          }
+        });
+      </script>
+    </div>
+  </div>
+</div>

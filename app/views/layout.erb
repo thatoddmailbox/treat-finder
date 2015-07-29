@@ -4,18 +4,27 @@
     <title>Treat Finder</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/fixedsticky.css">
 
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="/js/fixedsticky.js"></script>
     
     <style>
       body {
         padding: 10px;
       }
     </style>
+    <script>
+      $(document).ready(function() {
+        $(".map-canvas").fixedsticky();
+      });
+    </script>
   </head>
   <body>
-    <%= yield %>
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>

@@ -24,8 +24,7 @@ class ApplicationController < Sinatra::Base
   end
   
   post "/find_treats" do
-    @results = Yelp.client.search(params[:location], { term: params[:search]   }, { :cc => "US", :lang => "en" })
-    
+    @results = Yelp.client.search(params[:location], { term: params[:search], limit: 19 }, { :cc => "US", :lang => "en" })
     erb :search_results
   end
   
@@ -38,6 +37,8 @@ class ApplicationController < Sinatra::Base
     def jsObject(obj)
       if obj.class == String
         return jsString(obj)
+      elsif obj.class == Array
+        return jsArray(obj)
       elsif obj.class == BurstStruct::Burst
         return jsBStruct(obj)
       else 
@@ -46,7 +47,7 @@ class ApplicationController < Sinatra::Base
     end
     
     def jsString(str)
-      return "\"" + str.gsub("\"", "\\\"") + "\""
+      return "\"" + str.gsub("\"", "\\\"").gsub("\n", "<br />") + "\""
     end
     
     def jsBStruct(hash)
@@ -77,7 +78,7 @@ class ApplicationController < Sinatra::Base
         else
           first_time = false
         end
-        returnStr += jsBStruct(item)
+        returnStr += jsObject(item)
       end
       returnStr += "]"
       return returnStr
