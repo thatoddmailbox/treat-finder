@@ -8,6 +8,14 @@ class ApplicationController < Sinatra::Base
   set :views, "app/views"
   set :public_folder, "public"
   
+  get "/" do
+    erb :index
+  end
+  
+  post "/find_treats" do
+    "LOADING TREATS"
+  end
+  
   helpers do
     def h(text)
       Rack::Utils.escape_html(text)

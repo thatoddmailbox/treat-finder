@@ -5,7 +5,8 @@ gem "sinatra"
 gem "activerecord"
 gem "sinatra-activerecord"
 gem "rake"
-
+gem "yelp", require: "yelp"
+gem "encrypted_cookie"
 gem "bcrypt"
 
 group :development do
