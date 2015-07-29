@@ -17,6 +17,11 @@ html, body {
   position: sticky;
 }
 
+.qley-mini {
+  width: 100px;
+  height: 80px;
+}
+
 /*!
  * Start Bootstrap - Business Casual Bootstrap Theme (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
