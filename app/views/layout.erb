@@ -10,6 +10,8 @@
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="https://cdn.jsdelivr.net/zxcvbn/1.0/zxcvbn-async.js"></script>
+    <script src="https://cdn.jsdelivr.net/zxcvbn/1.0/zxcvbn.js"></script>
     <script src="/js/fixedsticky.js"></script>
     <script src="/js/map.js"></script>
     
@@ -29,6 +31,33 @@
       $(document).ready(function() {
         $(".fixedsticky").fixedsticky();
         $('[data-toggle="tooltip"]').tooltip();
+        $("input[name=password]").keyup(function() {
+          var result = zxcvbn($(this).val());
+          var passwordStrengthStr = "";
+          if (result.score == 0)
+          {
+            passwordStrengthStr = "Useless";
+          }
+          else if (result.score == 1)
+          {
+            passwordStrengthStr = "Weak";
+          }
+          else if (result.score == 2)
+          {
+            passwordStrengthStr = "OK";
+          }
+          else if (result.score == 3)
+          {
+            passwordStrengthStr = "Good";
+          }
+          else if (result.score == 4)
+          {
+            passwordStrengthStr = "Very good";
+          }
+          $(".passwordStrength").text("Password rating: " + passwordStrengthStr);
+          $(".passwordStrengthBar").attr("aria-valuenow", result.score);
+          $(".passwordStrengthBar").css("width", (result.score / 4)*100 + "%");
+        });
         $("#determineLocation").click(function() {
           if (navigator.geolocation) {
             if ($(this).children("i").hasClass("fa-check")) {

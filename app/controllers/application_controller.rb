@@ -33,7 +33,7 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
   
-  post "/find_treats" do
+  post "/find" do
     @results = Yelp.client.search(params[:location], { term: params[:search], limit: 19 }, { :cc => "US", :lang => "en" })
     erb :search_results
   end
