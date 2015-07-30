@@ -5,7 +5,7 @@ gem "sinatra"
 gem "activerecord"
 gem "sinatra-activerecord"
 gem "rake"
-gem "yelp", require: "yelp"
+gem "yelp", :git => 'https://github.com/thatoddmailbox/yelp-ruby.git', :branch => 'develop'
 gem "encrypted_cookie"
 gem "bcrypt"
 
