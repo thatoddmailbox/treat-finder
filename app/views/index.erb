@@ -4,7 +4,14 @@
       <h2>Please enter your search</h2> <br>
 
       <form action="/find_treats" method="POST">
-        <input type="text" name="location" placeholder="Location" class="form-control" />
+        <div class="row">
+          <div class="col-lg-11">
+            <input type="text" name="location" placeholder="Location" class="form-control" />
+          </div>
+          <div class="col-lg-1">
+            <button id="determineLocation" class="btn btn-primary"><i class="fa fa-location-arrow"></i></button>
+          </div>
+        </div>
         <input type="text" name="search" placeholder="Search" class="form-control" /> <br>
         <input type="submit" value="FIND THINGS" class="btn btn-primary btn-lg" />
       </form>

@@ -1,5 +1,5 @@
-
 require_relative "../../config/environment"
+require_relative "../models/user"
 
 require "open-uri"
 require 'yelp'
@@ -19,6 +19,15 @@ class ApplicationController < Sinatra::Base
     set :public_folder, "public"
   end
   
+  before do
+    if session[:user_id] and session[:user_id] > -1
+      @loggedIn = true
+      @user = User.find(session[:user_id])
+    else
+      @loggedIn = false
+    end
+  end
+  
   get "/" do
     erb :index
   end
@@ -28,6 +37,60 @@ class ApplicationController < Sinatra::Base
     erb :search_results
   end
   
+  get "/login" do
+    erb :login
+  end
+  
+  post "/login" do
+    if params[:username].chomp == "" or params[:password].chomp == ""
+      return "Please enter your username and password."
+    end
+    
+    user = User.find_by_username(params[:username])
+    
+    if user == nil
+      return "Invalid username and password combination."
+    end    
+    if user.password != params[:password]
+      return "Invalid username and password combination."
+    end
+    
+    session[:user_id] = user.id
+    
+    redirect to("/")
+  end
+  
+  get "/signup" do
+    erb :signup
+  end
+  
+  post "/signup" do
+    if params[:username].chomp == "" or params[:password].chomp == "" or params[:password_confirm].chomp == ""
+      return "Please enter your username and password."
+    end
+    
+    if params[:password] != params[:password_confirm]
+      return "The passwords do not match."
+    end
+    
+    if User.find_by_username(params[:username])
+      
+    end
+    
+    newuser = User.new
+    newuser.username = params[:username]
+    newuser.password = params[:password]
+    newuser.save
+    
+    session[:user_id] = newuser.id
+    
+    redirect to("/")
+  end
+  
+  get "/logout" do
+    session[:user_id] = -1
+    redirect to("/")
+  end
   
   helpers do
     def h(text)

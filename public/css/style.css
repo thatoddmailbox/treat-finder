@@ -17,6 +17,18 @@ html, body {
   position: sticky;
 }
 
+#determineLocation {
+  width: 100%;
+}
+
+.col-lg-1 {
+  padding-left: 0;
+}
+
+.col-lg-11 {
+  padding-right: 0;
+}
+
 .qley-mini {
   width: 100px;
   height: 80px;

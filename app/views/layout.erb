@@ -3,6 +3,7 @@
   <head>
     <title>Qley</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/fixedsticky.css">
 
@@ -19,10 +20,31 @@
         width: 200px;
         height: 90px;
       }
+      .mapCol {
+        height: 100%;
+      }
     </style>
     <script>
       $(document).ready(function() {
-        $(".map-canvas").fixedsticky();
+        $(".fixedsticky").fixedsticky();
+        $("#determineLocation").click(function() {
+          if (navigator.geolocation) {
+            $(this).children("i").removeClass("fa-location-arrow");
+            $(this).children("i").addClass("fa-refresh");
+            $(this).children("i").addClass("fa-spin");
+            navigator.geolocation.getCurrentPosition(function(position) {
+              new google.maps.Geocoder().geocode({ 'location': new google.maps.LatLng(position.coords.latitude, position.coords.longitude)}, function(result) {
+                $("#determineLocation").children("i").removeClass("fa-refresh");
+                $("#determineLocation").children("i").removeClass("fa-spin");
+                $("#determineLocation").children("i").addClass("fa-check");
+                $("input[name=location]").val(result[0].formatted_address);           
+              });
+            });
+          } else {
+            alert("Your browser doesn't support Geolocation. :(");
+          }
+          return false;
+        });
       });
     </script>
   </head>
@@ -36,6 +58,11 @@
           <div class="col-lg-9">
             <br />
             <h3><em>"Turning the finding places industry on its side."</em></h3>
+            <% if @user %>
+            Welcome, <%= h @user.username %>! <a href="/logout">Log out</a>
+            <% else %>
+            Qley your favorite places today! <a href="/login">Log in</a> or <a href="/signup">sign up</a>!
+            <% end %>
           </div>
         </div>
       </div>
