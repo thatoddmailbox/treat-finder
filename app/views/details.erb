@@ -28,9 +28,21 @@ end
           <br />
           <br />
           <h4 class="address"><%= business.display_phone %></h4>
+          <br />
+          <br />
+          <%
+            starClass = "fa-star-o"
+            if @user
+              star = Star.find_by(user_id: @user.id, place_id: business.id)
+              if star
+                starClass = "fa-star"
+              end
+            end
+          %>
+          <button class="btn btn-default qley" data-id="<%= h business.id %>"><i class="fa <%= starClass %>"></i> Qley this place!</button>
         </div>
         <div class="col-lg-6">
-          <div id="map-canvas"></div>
+          <div id="map-canvas" style="width: 500px; height: 500px;"></div>
         </div>
       </div>
     </div>
@@ -38,6 +50,28 @@ end
 </div>
 <script>
   $(document).ready(function() {
-    var map = new 
+    window.map = new google.maps.Map($("#map-canvas")[0], {
+      center: new google.maps.LatLng(0, 0),
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    window.geocoder = new google.maps.Geocoder();
+    var business = <%= jsObject business %>;
+    var display_address_str = "";
+    var first = true;
+    for (var aIndex in business.location.display_address)
+    {
+      var part = business.location.display_address[aIndex];
+      if (first)
+      {
+        first = false;
+      }
+      else
+      {
+        display_address_str += ", ";
+      }
+      display_address_str += part;
+    }
+    geocodeAndPlace(display_address_str, business);
   });
 </script>
