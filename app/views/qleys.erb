@@ -2,19 +2,63 @@
   <div class="box">
     <div class="col-lg-12">
       <h1>My Qleys</h1>
-      <% if @user %>
-      <ul>
-        <%
-stars = Star.where(user_id: @user.id)
-stars.each do |star|
-  business = Yelp.client.business(star.place_id)
-  %>
-        <li><a href="/business/<%= business.id %>"><%= h business.name %></a></li>
-        <% end %>
-      </ul>
+      <% if @loggedIn %>
+      <div class="row">
+        <div class="col-lg-4">
+          <ul>
+          <%
+          stars = Star.where(user_id: @user.id)
+          if stars.length == 0 %>
+            <p>You have no Qleys! :( Click the star button next to a place to Qley it.</p>
+          <% end
+          businesses = []
+          stars.each do |star|
+            business = Yelp.client.business(star.place_id)
+            businesses.push(business)
+            %>
+            <li><a href="/business/<%= business.id %>"><%= h business.name %></a></li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="col-md-8">
+          <% if businesses.length != 0 %>
+          <div id="map-canvas" style="width: 600px; height: 500px;"></div>
+          <% end %>
+        </div>
+      </div>
       <% else %>
-      <h4>To see your Qleys, <a href="/login">log in</a> or <a href="/signup">sign up</a>.</h4>
+        <h4>To see your Qleys, <a href="/login">log in</a> or <a href="/signup">sign up</a>.</h4>
       <% end %>
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+    window.map = new google.maps.Map($("#map-canvas")[0], {
+      center: new google.maps.LatLng(0, 0),
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    window.geocoder = new google.maps.Geocoder();
+    var businesses = <%= jsObject businesses %>;
+    for (var bIndex in businesses) {
+      var business = businesses[bIndex];
+      var display_address_str = "";
+      var first = true;
+      for (var aIndex in business.location.display_address)
+      {
+        var part = business.location.display_address[aIndex];
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          display_address_str += ", ";
+        }
+        display_address_str += part;
+      }
+      geocodeAndPlace(display_address_str, business);
+    }
+  });
+</script>
