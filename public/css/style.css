@@ -21,6 +21,17 @@ html, body {
   width: 100%;
 }
 
+.review {
+  font-size: 1.8em;
+  position: relative;
+  top: 4px;
+  left: 2px;
+}
+
+.address {
+  display: inline;
+}
+
 .col-lg-1 {
   padding-left: 0;
 }

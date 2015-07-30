@@ -11,8 +11,19 @@
 
           <% @results.businesses.each do |business| %>
 
-          <h3><%= h business.name %></h3>
+          <h3><a href="/business/<%= h business.id %>"><%= h business.name %></a></h3>
           <img src="<%= h business.rating_img_url_large %>">
+          &nbsp;&nbsp;&nbsp;
+          <%
+            starClass = "fa-star-o"
+            if @user
+              star = Star.find_by(user_id: @user.id, place_id: business.id)
+              if star
+                starClass = "fa-star"
+              end
+            end
+          %>
+          <button class="btn btn-default qley" data-id="<%= h business.id %>" data-toggle="tooltip" data-placement="bottom" title="Qley this place!"><i class="fa <%= starClass %>"></i></button>
           <%
 display_address_str = ""
 first = true

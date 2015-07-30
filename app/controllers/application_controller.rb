@@ -1,5 +1,6 @@
 require_relative "../../config/environment"
 require_relative "../models/user"
+require_relative "../models/star"
 
 require "open-uri"
 require 'yelp'
@@ -90,6 +91,35 @@ class ApplicationController < Sinatra::Base
   get "/logout" do
     session[:user_id] = -1
     redirect to("/")
+  end
+  
+  get "/qleys" do
+    erb :qleys
+  end
+  
+  post "/qleyplace" do
+    if not @user
+      return "Not logged in."
+    end
+    
+    star = Star.find_by(user_id: @user.id, place_id: params[:id])
+    
+    if star == nil
+      star = Star.new
+      star.user = @user
+      star.place_id = params[:id]
+      star.save
+      return "on"
+    else
+      star.destroy
+      return "off"
+    end
+    
+    return "Error"
+  end
+  
+  get "/business/:id" do
+    erb :details
   end
   
   helpers do

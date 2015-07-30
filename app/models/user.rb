@@ -1,6 +1,7 @@
 require 'bcrypt'
 
 class User < ActiveRecord::Base
+  has_many :stars
   # users.password_hash in the database is a :string
   include BCrypt
 
