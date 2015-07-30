@@ -9,6 +9,8 @@ gem "yelp", require: "yelp"
 gem "encrypted_cookie"
 gem "bcrypt"
 
+gem "pg"
+
 group :development do
   gem "pry"
   gem "shotgun"

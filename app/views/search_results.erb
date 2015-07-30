@@ -42,7 +42,7 @@ end
               var marker = new google.maps.Marker({
                 map: map,
                 position: results[0].geometry.location,
-                title: "Hello World!",
+                title: "Qley",
                 icon: "img/qlogo.png"
               });
               google.maps.event.addListener(marker, 'click', function() {
@@ -55,6 +55,10 @@ end
                 });
                 window.curInfo.open(map,marker);
               });
+            } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {    
+              setTimeout(function() {
+                  geocodeAndPlace(address, businessParam);
+              }, 200);
             } else {
               console.error('Geocode was not successful for the following reason: ' + status);
             }

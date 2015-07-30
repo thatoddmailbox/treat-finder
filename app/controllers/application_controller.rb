@@ -74,7 +74,7 @@ class ApplicationController < Sinatra::Base
     end
     
     if User.find_by_username(params[:username])
-      
+      return "That username is already taken!"
     end
     
     newuser = User.new
