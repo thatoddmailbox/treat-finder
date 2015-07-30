@@ -42,8 +42,6 @@ end
       </div>
 
       <script>
-        var map;
-
         $(document).ready(function() {
           var businesses = <%= jsArray @results.businesses %>;
 
@@ -55,7 +53,7 @@ end
           };
 
           window.map = new google.maps.Map(mapCanvas, mapOptions);
-          gendow.ocoder = new google.maps.Geocoder();
+          window.geocoder = new google.maps.Geocoder();
 
           for (var bIndex in businesses)
           {
