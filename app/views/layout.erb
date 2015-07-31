@@ -60,7 +60,7 @@
         });
         $("#determineLocation").click(function() {
           if (navigator.geolocation) {
-            if ($(this).children("i").hasClass("fa-check")) {
+            if ($(this).children("i").hasClass("fa-check") || $(this).children("i").hasClass("fa-refresh")) {
               return false;
             }
             $(this).children("i").removeClass("fa-location-arrow");
