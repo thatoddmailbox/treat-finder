@@ -34,6 +34,10 @@ class ApplicationController < Sinatra::Base
   end
   
   post "/find" do
+    if params[:location].chomp == ""
+      @error = "Please enter a location."
+      return erb :error
+    end
     @results = Yelp.client.search(params[:location], { term: params[:search], limit: 19 }, { :cc => "US", :lang => "en" })
     erb :search_results
   end
@@ -48,16 +52,19 @@ class ApplicationController < Sinatra::Base
   
   post "/login" do
     if params[:username].chomp == "" or params[:password].chomp == ""
-      return "Please enter your username and password."
+      @error = "Please enter your username and password."
+      erb :error
     end
     
     user = User.find_by_username(params[:username])
     
     if user == nil
-      return "Invalid username and password combination."
+      @error = "Invalid username and password combination."
+      return erb :error
     end    
     if user.password != params[:password]
-      return "Invalid username and password combination."
+      @error = "Invalid username and password combination."
+      return erb :error
     end
     
     session[:user_id] = user.id
@@ -75,15 +82,18 @@ class ApplicationController < Sinatra::Base
   
   post "/signup" do
     if params[:username].chomp == "" or params[:password].chomp == "" or params[:password_confirm].chomp == ""
-      return "Please enter your username and password."
+      @error = "Please enter a username and password."
+      return erb :error
     end
     
     if params[:password] != params[:password_confirm]
-      return "The passwords do not match."
+      @error = "The passwords do not match."
+      return erb :error
     end
     
     if User.find_by_username(params[:username])
-      return "That username is already taken!"
+      @error = "That username is already taken!"
+      return erb :error
     end
     
     newuser = User.new

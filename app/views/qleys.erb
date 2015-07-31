@@ -9,7 +9,7 @@
           <%
           stars = Star.where(user_id: @user.id)
           if stars.length == 0 %>
-            <p>You have no Qleys! :( Click the star button next to a place to Qley it.</p>
+            <p>You have no Qleys! Click the star button next to a place to Qley it.</p>
           <% end
           businesses = []
           stars.each do |star|
