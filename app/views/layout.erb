@@ -89,10 +89,10 @@
           var $thisThing = $(this);
           $.post("/qleyplace", { id: $(this).attr("data-id") }, function(response) {
             if (response == "Not logged in.") {
+              $thisThing.children("i").removeClass("fa-spin");
+              $thisThing.children("i").removeClass("fa-refresh");
+              $thisThing.children("i").addClass("fa-star");
               alert("Log in to Qley your favorite places!");
-              $(this).children("i").removeClass("fa-spin");
-              $(this).children("i").removeClass("fa-refresh");
-              $(this).children("i").addClass("fa-star");
             } else if (response.substring(0, 2) == "on" || response.substring(0, 3) == "off") {
               $thisThing.children("i").removeClass("fa-spin");
               $thisThing.children("i").removeClass("fa-refresh");
