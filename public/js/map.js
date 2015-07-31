@@ -30,3 +30,13 @@ function geocodeAndPlace(address, businessParam)
     }
   });
 }
+
+function qleyCount(count) {
+  var displayStr = count + " people have Qley'd this place.";
+  if (count == 0) {
+    displayStr = "No one has Qley'd this place.";
+  } else if (count == 1) {
+    displayStr = "1 person has Qley'd this place.";
+  }
+  return displayStr;
+}

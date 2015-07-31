@@ -117,10 +117,10 @@ class ApplicationController < Sinatra::Base
       star.user = @user
       star.place_id = params[:id]
       star.save
-      return "on"
+      return "on " + Star.where(place_id: params[:id]).length.to_s
     else
       star.destroy
-      return "off"
+      return "off" + Star.where(place_id: params[:id]).length.to_s
     end
     
     return "Error"
