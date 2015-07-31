@@ -40,6 +40,9 @@ end
             end
           %>
           <button class="btn btn-default qley" data-id="<%= h business.id %>"><i class="fa <%= starClass %>"></i> Qley this place!</button>
+          <br />
+          <br />
+          <h4 class="address qleyCount"><%= qleyCount(business.id) %></h4>
         </div>
         <div class="col-lg-6">
           <div id="map-canvas" style="width: 500px; height: 500px;"></div>

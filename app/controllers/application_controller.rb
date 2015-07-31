@@ -135,6 +135,17 @@ class ApplicationController < Sinatra::Base
       Rack::Utils.escape_html(text)
     end
     
+    def qleyCount(place_id)
+      count = Star.where(place_id: place_id).length
+      displayStr = count.to_s + " people have Qley'd this place."
+      if count == 0
+        displayStr = "No one has Qley'd this place."
+      elsif count == 1
+        displayStr = "1 person has Qley'd this place."
+      end
+      displayStr
+    end
+    
     def jsObject(obj)
       if obj.class == String
         return jsString(obj)

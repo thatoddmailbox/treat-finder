@@ -94,9 +94,7 @@
               $thisThing.children("i").removeClass("fa-spin");
               $thisThing.children("i").removeClass("fa-refresh");
               $thisThing.children("i").addClass("fa-star" + (response.substring(0, 3) == "off" ? "-o" : ""));
-              $thisThing.nextAll(".qleyCount").first().text(qleyCount(response.substring(3)));
-            } else {
-              alert(response);
+              $thisThing.nextAll(".qleyCount").first().text(qleyCount(response.substring(3)));t(response);
             }
           });
         });

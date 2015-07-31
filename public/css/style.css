@@ -45,6 +45,10 @@ html, body {
   height: 80px;
 }
 
+.address.qleyCount {
+  font-size: 1.2em;
+}
+
 /*!
  * Start Bootstrap - Business Casual Bootstrap Theme (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
